@@ -5,15 +5,20 @@ public class AStar
 {
 	public static PriorityQueue closedList, openList;
 
-	private static float HeuristicEstimateCost(Node curNode, Node goal)
+	private static float HeuristicEstimateCost(Node curNode, Node goalNode)
 	{
-		Vector3 vecCost = curNode.position - goal.position;
+		Vector3 vecCost = curNode.position - goalNode.position;
 		return vecCost.magnitude;
 	}
 
-	public static ArrayList FindPath(Node curNode, Node goal)
+	public static ArrayList FindPath(Node start, Node goal)
 	{
 		openList = new PriorityQueue();
+		openList.Push(start);
+		start.nodetotalCost = 0.0f;
+		start.estimatedCost = HeuristicEstimateCost(start, goal);
+
+		closedList = new PriorityQueue();
 		Node node = null;
 
 		while(openList.Length != 0)

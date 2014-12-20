@@ -64,7 +64,7 @@ public class GridManager : MonoBehaviour
 				int col = GetColumn(indexCell);
 				int row = GetRow(indexCell);
 
-				//nodes[row, col].MarkAsObstacle();
+				nodes[row, col].MarkAsObstacle();
 			}
 		}
 	}
@@ -110,7 +110,7 @@ public class GridManager : MonoBehaviour
 	}
 
 	public int GetColumn(int index) {
-		int col = index % numOfColumns;
+		int col = index / numOfColumns;
 		return col;
 	}
 
@@ -155,44 +155,41 @@ public class GridManager : MonoBehaviour
 		}
 	}
 
-	void OnDrawGizmos()
-	{
-		if(showGrid)
-		{
-			DebugDrawGrid(transform.position, numOfRows, numOfColumns, gridCellSize,Color.blue);
+	void OnDrawGizmos() {
+		if (showGrid) {
+			DebugDrawGrid(transform.position, numOfRows, numOfColumns,
+			              gridCellSize, Color.blue);
 		}
 		Gizmos.DrawSphere(transform.position, 0.5f);
-		if(showObstacleBlocks)
-		{
-			Vector3 cellSize = new Vector3(gridCellSize, 1.0f, gridCellSize);
-			if(obstacleList != null && obstacleList.Length > 0)
-			{
-				foreach(GameObject data in obstacleList)
-				{
-					Gizmos.DrawCube(GetGridCellCenter(GetGridIndex(data.transform.position)), cellSize);
+		if (showObstacleBlocks) {
+			Vector3 cellSize = new Vector3(gridCellSize, 1.0f,
+			                               gridCellSize);
+			if (obstacleList != null && obstacleList.Length > 0) {
+				foreach (GameObject data in obstacleList) {
+					Gizmos.DrawCube(GetGridCellCenter(
+						GetGridIndex(data.transform.position)), cellSize);
 				}
 			}
 		}
 	}
-
-	public void DebugDrawGrid(Vector3 origin, int numRows, int numCols, float cellSize, Color color)
-	{
-		float width = numCols * cellSize;
-		float height = numRows * cellSize;
-
-		for(int i = 0; i < numRows + 1; i++)
-		{
-			Vector3 startPos = origin + i * cellSize * new Vector3(0.0f, 0.0f, 1.0f);
-			Vector3 endPos = startPos + width * new Vector3(1.0f, 0.0f, 0.0f);
-
+	public void DebugDrawGrid(Vector3 origin, int numRows, int
+	                          numCols,float cellSize, Color color) {
+		float width = (numCols * cellSize);
+		float height = (numRows * cellSize);
+		// Draw the horizontal grid lines
+		for (int i = 0; i < numRows + 1; i++) {
+			Vector3 startPos = origin + i * cellSize * new Vector3(0.0f,
+			                                                       0.0f, 1.0f);
+			Vector3 endPos = startPos + width * new Vector3(1.0f, 0.0f,
+			                                                0.0f);
 			Debug.DrawLine(startPos, endPos, color);
 		}
-
-		for(int i = 0; i < numCols + 1; i++)
-		{
-			Vector3 startPos = origin + i * cellSize * new Vector3(1.0f, 0.0f, 0.0f);
-			Vector3 endPos = startPos + height * new Vector3(0.0f, 0.0f, 1.0f);
-			
+		// Draw the vertial grid lines
+		for (int i = 0; i < numCols + 1; i++) {
+			Vector3 startPos = origin + i * cellSize * new Vector3(1.0f,
+			                                                       0.0f, 0.0f);
+			Vector3 endPos = startPos + height * new Vector3(0.0f, 0.0f,
+			                                                 1.0f);
 			Debug.DrawLine(startPos, endPos, color);
 		}
 	}
