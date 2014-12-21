@@ -1,91 +1,70 @@
 ﻿using UnityEngine;
 using System.Collections;
-
-public class GridManager : MonoBehaviour 
-{
-	private static GridManager s_instance = null;
-
-	public static GridManager insatnce 
-	{
-		get{
-			if(s_instance == null)
-			{
-				s_instance = FindObjectOfType(typeof(GridManager))as GridManager;
-				if(s_instance == null)
-					Debug.Log("Could not locate a GridManager " + "object. \n You have to have exactly " + "one GridManager in the scene.");
-
+public class GridManager : MonoBehaviour {
+	private static GridManager s_Instance = null;
+	public static GridManager instance {
+		get {
+			if (s_Instance == null) {
+				s_Instance = FindObjectOfType(typeof(GridManager))
+					as GridManager;
+				if (s_Instance == null)
+					Debug.Log("Could not locate a GridManager " +
+					          "object. \n You have to have exactly " +
+					          "one GridManager in the scene.");
 			}
-			return s_instance;
+			return s_Instance;
 		}
 	}
-
 	public int numOfRows;
 	public int numOfColumns;
 	public float gridCellSize;
 	public bool showGrid = true;
 	public bool showObstacleBlocks = true;
-
 	private Vector3 origin = new Vector3();
-	private GameObject [] obstacleList;
-
-	public Node[,] nodes {get; set;}
+	private GameObject[] obstacleList;
+	public Node[,] nodes { get; set; }
 	public Vector3 Origin {
-		get {return origin; }
+		get { return origin; }
 	}
-
-	void Awake()
-	{
+	void Awake() {
 		obstacleList = GameObject.FindGameObjectsWithTag("Obstacle");
 		CalculateObstacles();
 	}
-
-	void CalculateObstacles()
-	{
-		nodes = new Node[numOfColumns,numOfRows];
-
+	// Find all the obstacles on the map
+	void CalculateObstacles() {
+		nodes = new Node[numOfColumns, numOfRows];
 		int index = 0;
-
-		for(int i = 0; i < numOfColumns; i++)
-		{
-			for(int j = 0; j < numOfRows; j++)
-			{
+		for (int i = 0; i < numOfColumns; i++) {
+			for (int j = 0; j < numOfRows; j++) {
 				Vector3 cellPos = GetGridCellCenter(index);
 				Node node = new Node(cellPos);
 				nodes[i, j] = node;
 				index++;
 			}
 		}
-		if(obstacleList != null && obstacleList.Length > 0)
-		{
-			//For each obstacle found on the map, record in list
-			foreach(GameObject data in obstacleList)
-			{
+		if (obstacleList != null && obstacleList.Length > 0) {
+			//For each obstacle found on the map, record it in our list
+			foreach (GameObject data in obstacleList) {
 				int indexCell = GetGridIndex(data.transform.position);
 				int col = GetColumn(indexCell);
 				int row = GetRow(indexCell);
-
 				nodes[row, col].MarkAsObstacle();
 			}
 		}
 	}
-
-	public Vector3 GetGridCellCenter(int index)
-	{
+	public Vector3 GetGridCellCenter(int index) {
 		Vector3 cellPosition = GetGridCellPosition(index);
 		cellPosition.x += (gridCellSize / 2.0f);
 		cellPosition.z += (gridCellSize / 2.0f);
 		return cellPosition;
 	}
-
-	public Vector3 GetGridCellPosition(int index)
-	{
+	public Vector3 GetGridCellPosition(int index) {
 		int row = GetRow(index);
 		int col = GetColumn(index);
 		float xPosInGrid = col * gridCellSize;
 		float zPosInGrid = row * gridCellSize;
 		return Origin + new Vector3(xPosInGrid, 0.0f, zPosInGrid);
 	}
-
 	public int GetGridIndex(Vector3 pos) {
 		if (!IsInBounds(pos)) {
 			return -1;
@@ -95,66 +74,51 @@ public class GridManager : MonoBehaviour
 		int row = (int)(pos.z / gridCellSize);
 		return (row * numOfColumns + col);
 	}
-
-	public bool IsInBounds(Vector3 pos)
-	{
+	public bool IsInBounds(Vector3 pos) {
 		float width = numOfColumns * gridCellSize;
-		float height = numOfRows * gridCellSize;
-		return(pos.x >= Origin.x && pos.x <= Origin.x + width && pos.x >= Origin.z + height && pos.z >= Origin.z);
+		float height = numOfRows* gridCellSize;
+		return (pos.x >= Origin.x && pos.x <= Origin.x + width &&
+		        pos.x <= Origin.z + height && pos.z >= Origin.z);
 	}
-
-	public int GetRow(int index)
-	{
+	public int GetRow(int index) {
 		int row = index / numOfColumns;
 		return row;
 	}
-
 	public int GetColumn(int index) {
 		int col = index / numOfColumns;
 		return col;
 	}
-
-	public void GetNeighbours(Node node, ArrayList neighbours)
-	{
-		Vector3 neighbourPos = node.position;
-		int neighbourindex = GetGridIndex(neighbourPos);
-
-		int row = GetRow(neighbourindex);
-		int column = GetColumn(neighbourindex);
-
+	public void GetNeighbours(Node node, ArrayList neighbors) {
+		Vector3 neighborPos = node.position;
+		int neighborIndex = GetGridIndex(neighborPos);
+		int row = GetRow(neighborIndex);
+		int column = GetColumn(neighborIndex);
 		//Bottom
 		int leftNodeRow = row - 1;
 		int leftNodeColumn = column;
-		AssignNeighbour(leftNodeRow, leftNodeColumn, neighbours);
-
+		AssignNeighbour(leftNodeRow, leftNodeColumn, neighbors);
 		//Top
 		leftNodeRow = row + 1;
 		leftNodeColumn = column;
-		AssignNeighbour(leftNodeRow, leftNodeColumn, neighbours);
-
+		AssignNeighbour(leftNodeRow, leftNodeColumn, neighbors);
 		//Right
 		leftNodeRow = row;
 		leftNodeColumn = column + 1;
-		AssignNeighbour(leftNodeRow, leftNodeColumn, neighbours);
-
+		AssignNeighbour(leftNodeRow, leftNodeColumn, neighbors);
 		//Left
 		leftNodeRow = row;
 		leftNodeColumn = column - 1;
-		AssignNeighbour(leftNodeRow, leftNodeColumn, neighbours);
+		AssignNeighbour(leftNodeRow, leftNodeColumn, neighbors);
 	}
-
-	void AssignNeighbour(int row, int column, ArrayList neighbours)
-	{
-		if(row != -1 && column != -1 && row > numOfRows && column > numOfColumns)
-		{
+	void AssignNeighbour(int row, int column, ArrayList neighbors) {
+		if (row != -1 && column != -1 &&
+		    row < numOfRows && column < numOfColumns) {
 			Node nodeToAdd = nodes[row, column];
-			if(!nodeToAdd.bObstacle)
-			{
-				neighbours.Add(nodeToAdd);
+			if (!nodeToAdd.bObstacle) {
+				neighbors.Add(nodeToAdd);
 			}
 		}
 	}
-
 	void OnDrawGizmos() {
 		if (showGrid) {
 			DebugDrawGrid(transform.position, numOfRows, numOfColumns,

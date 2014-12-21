@@ -1,80 +1,60 @@
 ﻿using UnityEngine;
 using System.Collections;
-
-public class AStar 
-{
+public class AStar {
 	public static PriorityQueue closedList, openList;
-
-	private static float HeuristicEstimateCost(Node curNode, Node goalNode)
-	{
+	private static float HeuristicEstimateCost(Node curNode,
+	                                           Node goalNode) {
 		Vector3 vecCost = curNode.position - goalNode.position;
 		return vecCost.magnitude;
 	}
-
-	public static ArrayList FindPath(Node start, Node goal)
-	{
+	public static ArrayList FindPath(Node start, Node goal) {
 		openList = new PriorityQueue();
 		openList.Push(start);
-		start.nodetotalCost = 0.0f;
+		start.nodeTotalCost = 0.0f;
 		start.estimatedCost = HeuristicEstimateCost(start, goal);
-
 		closedList = new PriorityQueue();
 		Node node = null;
 
-		while(openList.Length != 0)
-		{
+		while (openList.Length != 0) {
 			node = openList.First();
-
-			if(node.position == goal.position)
-			{
+			//Check if the current node is the goal node
+			if (node.position == goal.position) {
 				return CalculatePath(node);
 			}
-
 			//Create an ArrayList to store the neighboring nodes
 			ArrayList neighbours = new ArrayList();
-
-			GridManager.insatnce.GetNeighbours(node, neighbours);
-
-			for(int i = 0; i < neighbours.Count; i++)
-			{
+			GridManager.instance.GetNeighbours(node, neighbours);
+			for (int i = 0; i < neighbours.Count; i++) {
 				Node neighbourNode = (Node)neighbours[i];
-
-				if(!closedList.Contains(neighbourNode))
-				{
-					float cost = HeuristicEstimateCost(node, neighbourNode);				                                
-
-					float totalCost = node.nodetotalCost + cost;
-					float neighbourNodeEstCost = HeuristicEstimateCost(neighbourNode, goal);
-
-					neighbourNode.nodetotalCost = totalCost;
+				if (!closedList.Contains(neighbourNode)) {
+					float cost = HeuristicEstimateCost(node,
+					                                   neighbourNode);
+					float totalCost = node.nodeTotalCost + cost;
+					float neighbourNodeEstCost = HeuristicEstimateCost(
+						neighbourNode, goal);
+					neighbourNode.nodeTotalCost = totalCost;
 					neighbourNode.parent = node;
-					neighbourNode.estimatedCost = totalCost + neighbourNodeEstCost;
-
-					if(!openList.Contains(neighbourNode))
-					{
+					neighbourNode.estimatedCost = totalCost +
+						neighbourNodeEstCost;
+					if (!openList.Contains(neighbourNode)) {
 						openList.Push(neighbourNode);
 					}
 				}
 			}
-			//push node to closed list
+			//Push the current node to the closed list
 			closedList.Push(node);
-			//and remove for open list
+			//and remove it from openList
 			openList.Remove(node);
 		}
-
-		if(node.position != goal.position)
-		{
+		if (node.position != goal.position) {
 			Debug.LogError("Goal Not Found");
 			return null;
 		}
 		return CalculatePath(node);
 	}
-
-	private static ArrayList CalculatePath(Node node)
-	{
+	private static ArrayList CalculatePath(Node node) {
 		ArrayList list = new ArrayList();
-		while(node != null)
-		{
+		while (node != null) {
 			list.Add(node);
 			node = node.parent;
 		}
