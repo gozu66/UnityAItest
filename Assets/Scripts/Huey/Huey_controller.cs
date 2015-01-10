@@ -17,7 +17,6 @@ public class Huey_controller : MonoBehaviour
 
 	public int xSpeedW = 10;
 	public int xSpeedS = 5;
-
 	public float Sensitivity = 1;
 
 	Rigidbody [] bones;
@@ -42,7 +41,7 @@ public class Huey_controller : MonoBehaviour
 		moveSpeed = Input.GetAxis("Vertical") * Time.deltaTime * xSpeedW;
 		strafeSpeed = Input.GetAxis("Horizontal") * Time.deltaTime * xSpeedS;
 
-		transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * Sensitivity);
+		if(strafeSpeed == 0 || moveSpeed != 0){transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * Sensitivity);}
 
 		CharCont.Move(transform.forward * moveSpeed);
 		CharCont.Move(transform.right * strafeSpeed);
@@ -52,8 +51,8 @@ public class Huey_controller : MonoBehaviour
 		isIdle = (moveSpeed == 0 && strafeSpeed == 0) ? true : false;
 		isRunning = (Input.GetKey(KeyCode.LeftShift)) ? true : false;
 
-		if(Input.GetKeyDown(KeyCode.R))
-			RagDoll();
+//		if(Input.GetKeyDown(KeyCode.R))
+//			RagDoll();
 	}
 
 	void RagDoll()
@@ -61,8 +60,10 @@ public class Huey_controller : MonoBehaviour
 		anim.enabled = !anim.enabled;
 		foreach(Rigidbody r in bones)
 		{
-			r.AddForce(Vector3.up * 1000, ForceMode.Force);
-			r.AddForce(transform.forward * 1000, ForceMode.Force);
+//			r.AddForce(Vector3.up * 1000, ForceMode.Force);
+//			r.AddForce(transform.forward * 1000, ForceMode.Force);
+
+
 		}
 	}
 }
