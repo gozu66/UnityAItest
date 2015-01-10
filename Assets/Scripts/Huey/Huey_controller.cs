@@ -7,6 +7,7 @@ public class Huey_controller : MonoBehaviour
 	bool isRunning;
 	bool isIdle;
 	bool isStrafing;
+	bool isRagdoll;
 
 	public float moveSpeed = 0.0f;
 	public float strafeSpeed = 0.0f;
@@ -19,10 +20,13 @@ public class Huey_controller : MonoBehaviour
 
 	public float Sensitivity = 1;
 
+	Rigidbody [] bones;
+
 	void Start()
 	{
 		CharCont = GetComponent<CharacterController>();
 		anim = this.GetComponent<Animator>();
+		bones = GetComponentsInChildren<Rigidbody>();
 	}
 
 	void Update()
@@ -33,6 +37,7 @@ public class Huey_controller : MonoBehaviour
 		anim.SetBool("isRunning", isRunning);
 		anim.SetBool("isIdle", isIdle);
 		anim.SetBool("isStrafing", isStrafing);
+		anim.SetBool("isRagdoll", isRagdoll);
 
 		moveSpeed = Input.GetAxis("Vertical") * Time.deltaTime * xSpeedW;
 		strafeSpeed = Input.GetAxis("Horizontal") * Time.deltaTime * xSpeedS;
@@ -45,9 +50,19 @@ public class Huey_controller : MonoBehaviour
 		isWalking = (moveSpeed != 0) ? true : false;
 		isStrafing = (strafeSpeed != 0 || Input.GetAxis("Mouse X") != 0) ? true : false;
 		isIdle = (moveSpeed == 0 && strafeSpeed == 0) ? true : false;
-
 		isRunning = (Input.GetKey(KeyCode.LeftShift)) ? true : false;
 
-		anim.speed = 1f;
+		if(Input.GetKeyDown(KeyCode.R))
+			RagDoll();
+	}
+
+	void RagDoll()
+	{
+		anim.enabled = !anim.enabled;
+		foreach(Rigidbody r in bones)
+		{
+			r.AddForce(Vector3.up * 1000, ForceMode.Force);
+			r.AddForce(transform.forward * 1000, ForceMode.Force);
+		}
 	}
 }

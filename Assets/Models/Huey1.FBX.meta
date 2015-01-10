@@ -29,6 +29,9 @@ ModelImporter:
     100046: CATRigSpine2
     100048: Huey
     100050: //RootNode
+    100052: CATRigLLegPlatform
+    100054: CATRigRLegPlatform
+    100056: Character001
     400000: CATRig Pelvis001
     400002: CATRig Pelvis002
     400004: CATRig Pelvis003
@@ -55,7 +58,82 @@ ModelImporter:
     400046: CATRigSpine2
     400048: //RootNode
     400050: Huey
+    400052: CATRigLLegPlatform
+    400054: CATRigRLegPlatform
+    400056: Character001
+    2300000: CATRig Pelvis001
+    2300002: CATRig Pelvis002
+    2300004: CATRig Pelvis003
+    2300006: CATRigLArm1
+    2300008: CATRigLArm2
+    2300010: CATRigLArmCollarbone
+    2300012: CATRigLArmPalm
+    2300014: CATRigLLeg1
+    2300016: CATRigLLeg2
+    2300018: CATRigLLegAnkle
+    2300020: CATRigLLegDigit11
+    2300022: CATRigLLegDigit12
+    2300024: CATRigRArm1
+    2300026: CATRigRArm2
+    2300028: CATRigRArmCollarbone
+    2300030: CATRigRArmPalm
+    2300032: CATRigRLeg1
+    2300034: CATRigRLeg2
+    2300036: CATRigRLegAnkle
+    2300038: CATRigRLegDigit11
+    2300040: CATRigRLegDigit12
+    2300042: CATRigSpine
+    2300044: CATRigSpine1
+    2300046: CATRigSpine2
+    3300000: CATRig Pelvis001
+    3300002: CATRig Pelvis002
+    3300004: CATRig Pelvis003
+    3300006: CATRigLArm1
+    3300008: CATRigLArm2
+    3300010: CATRigLArmCollarbone
+    3300012: CATRigLArmPalm
+    3300014: CATRigLLeg1
+    3300016: CATRigLLeg2
+    3300018: CATRigLLegAnkle
+    3300020: CATRigLLegDigit11
+    3300022: CATRigLLegDigit12
+    3300024: CATRigRArm1
+    3300026: CATRigRArm2
+    3300028: CATRigRArmCollarbone
+    3300030: CATRigRArmPalm
+    3300032: CATRigRLeg1
+    3300034: CATRigRLeg2
+    3300036: CATRigRLegAnkle
+    3300038: CATRigRLegDigit11
+    3300040: CATRigRLegDigit12
+    3300042: CATRigSpine
+    3300044: CATRigSpine1
+    3300046: CATRigSpine2
     4300000: Huey
+    4300002: CATRig Pelvis001
+    4300004: CATRigLLeg1
+    4300006: CATRigLLeg2
+    4300008: CATRigLLegAnkle
+    4300010: CATRigLLegDigit11
+    4300012: CATRigLLegDigit12
+    4300014: CATRigRLeg1
+    4300016: CATRigRLeg2
+    4300018: CATRigRLegAnkle
+    4300020: CATRigRLegDigit11
+    4300022: CATRigRLegDigit12
+    4300024: CATRigSpine1
+    4300026: CATRigSpine2
+    4300028: CATRig Pelvis002
+    4300030: CATRigLArmCollarbone
+    4300032: CATRigLArm1
+    4300034: CATRigLArm2
+    4300036: CATRigLArmPalm
+    4300038: CATRigRArmCollarbone
+    4300040: CATRigRArm1
+    4300042: CATRigRArm2
+    4300044: CATRigRArmPalm
+    4300046: CATRigSpine
+    4300048: CATRig Pelvis003
     7400000: Idle
     7400002: Walk
     7400004: Run
