@@ -12,26 +12,21 @@ public class Huey_controller : MonoBehaviour
 	public float moveSpeed = 0.0f;
 	public float strafeSpeed = 0.0f;
 
-//	CharacterController CharCont;
-
 	Animator anim;
-
-	public int xSpeedW = 10;
-	public int xSpeedS = 5;
-	public float Sensitivity = 1;
+	
+	public float jumpAmount, maxForce;
 
 	Rigidbody [] bones;
 
 	void Start()
 	{
-//		CharCont = GetComponent<CharacterController>();
 		anim = this.GetComponent<Animator>();
 		bones = GetComponentsInChildren<Rigidbody>();
 	}
 
 	void Update()
 	{
-		xSpeedW = (isRunning) ? 100 : 100;
+		moveSpeed = (isRunning) ? 15 : 5;
 
 		anim.SetBool("isWalking", isWalking);
 		anim.SetBool("isRunning", isRunning);
@@ -40,37 +35,23 @@ public class Huey_controller : MonoBehaviour
 		anim.SetBool("isRagdoll", isRagdoll);
 
 
+
 		if(!isRagdoll)
 		{
-//			moveSpeed = Input.GetAxis("Vertical") * Time.deltaTime + xSpeedW;
-//			strafeSpeed = Input.GetAxis("Horizontal") * Time.deltaTime + xSpeedS;
-//			Debug.Log(Input.GetAxis("Vertical"));
+			Vector3 newVelocity =(Input.GetAxis("Horizontal")*transform.right+Input.GetAxis("Vertical")*transform.forward).normalized;
+			rigidbody.MovePosition(rigidbody.position + newVelocity * Time.deltaTime * moveSpeed);
 
-//			if(strafeSpeed == 0 || moveSpeed != 0){transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * Sensitivity);}
+			Vector3 eularVelocity = new Vector3(0, Input.GetAxis("Mouse X"), 0);
+			Quaternion newRotation = Quaternion.Euler(eularVelocity);
+			rigidbody.MoveRotation(rigidbody.rotation * newRotation);
 
-//			CharCont.Move(transform.forward * moveSpeed);
-//			CharCont.Move(transform.right * strafeSpeed);
+			isWalking = (Input.GetAxis("Vertical") != 0) ? true : false;
+			isStrafing = (Input.GetAxis("Vertical") == 0 && Input.GetAxis("Horizontal") != 0) ? true : false;
+			isIdle = (Input.GetAxis("Vertical") == 0 && Input.GetAxis("Horizontal") == 0) ? true : false;
+			isRunning = (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") > 0) ? true : false;
 
-
-//			if(Input.GetAxis("Vertical"))
-
-			rigidbody.velocity = new Vector3(Input.GetAxis("Horizontal") * strafeSpeed,0,Input.GetAxis("Vertical") * moveSpeed);
-//				rigidbody.AddForce((transform.forward * xSpeedW), ForceMode.Force);
-
-//			if(Input.GetKey(KeyCode.A))
-//				rigidbody.AddForce((transform.right * xSpeedS), ForceMode.Force);
-
-//			if(Input.GetKey(KeyCode.S))
-//				rigidbody.AddForce((-transform.forward * xSpeedW), ForceMode.Force);
-			
-//			if(Input.GetKey(KeyCode.D))
-//				rigidbody.AddForce((-transform.right * xSpeedS), ForceMode.Force);
-
-
-			isWalking = (moveSpeed != 0) ? true : false;
-			isStrafing = (strafeSpeed != 0 || Input.GetAxis("Mouse X") != 0) ? true : false;
-			isIdle = (moveSpeed == 0 && strafeSpeed == 0) ? true : false;
-			isRunning = (Input.GetKey(KeyCode.LeftShift)) ? true : false;
+			if(Input.GetKeyDown(KeyCode.Space))
+				rigidbody.velocity = new Vector3 (0, jumpAmount, 0);
 		}
 
 		if(Input.GetKeyDown(KeyCode.R))
@@ -80,17 +61,16 @@ public class Huey_controller : MonoBehaviour
 	void RagDoll()
 	{
 		isRagdoll = true;
-//		CharCont.enabled = false;
+		rigidbody.isKinematic = true;
+		collider.enabled = false;
 		anim.enabled = false;
-		foreach(Rigidbody r in bones)
-		{
-
-		}
 	}
 
 	void OnCollisionEnter(Collision col)
 	{
-		Debug.Log(col.relativeVelocity.magnitude.ToString("0"));
+		Debug.Log(col.relativeVelocity.sqrMagnitude);
+		if(col.relativeVelocity.sqrMagnitude > maxForce)
+			RagDoll();
 	}
 
 }
