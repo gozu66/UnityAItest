@@ -90,7 +90,7 @@ Transition:
     m_ConditionEvent: isIdle
     m_EventTreshold: 0
     m_ExitTime: .802631617
-  - m_ConditionMode: 1
+  - m_ConditionMode: 2
     m_ConditionEvent: isWalking
     m_EventTreshold: 0
     m_ExitTime: .802631617
@@ -254,6 +254,10 @@ Transition:
     m_ConditionEvent: isWalking
     m_EventTreshold: 0
     m_ExitTime: .700000048
+  - m_ConditionMode: 2
+    m_ConditionEvent: isRunning
+    m_EventTreshold: 0
+    m_ExitTime: .700000048
   m_Atomic: 1
   m_Solo: 0
   m_Mute: 0
@@ -308,7 +312,7 @@ State:
   m_Motions:
   - {fileID: 7400004, guid: a068c987760a5794580f91d30c91950c, type: 3}
   m_ParentStateMachine: {fileID: 110700000}
-  m_Position: {x: 48, y: -252, z: 0}
+  m_Position: {x: 120, y: -252, z: 0}
   m_IKOnFeet: 1
   m_Mirror: 0
   m_Tag: 
@@ -384,5 +388,5 @@ StateMachine:
       - {fileID: 110136525}
       - {fileID: 110163794}
   m_MotionSetCount: 1
-  m_AnyStatePosition: {x: 108, y: -312, z: 0}
+  m_AnyStatePosition: {x: 192, y: -312, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
