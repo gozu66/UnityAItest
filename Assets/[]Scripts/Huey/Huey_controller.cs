@@ -38,6 +38,9 @@ public class Huey_controller : MonoBehaviour
 		anim.SetBool("isStrafing", isStrafing);
 		anim.SetBool("isRagdoll", isRagdoll);
 
+		if(Input.GetKeyDown(KeyCode.Escape)){Application.Quit();}
+		
+
 		if(!isRagdoll)
 		{
 			newVelocity =(Input.GetAxis("Horizontal")*transform.right+Input.GetAxis("Vertical")*transform.forward).normalized;
